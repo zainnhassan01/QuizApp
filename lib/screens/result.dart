@@ -7,7 +7,9 @@ class result extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var result = context.watch<QuizProvider>().result;
+    var level = context.watch<QuizProvider>().level;
+    var result = context.watch<QuizProvider>().resultR;
+    print("Result $result");
     return Scaffold(
       backgroundColor: Color(0xFF030651),
       body: Container(
@@ -23,7 +25,7 @@ class result extends StatelessWidget {
                   backgroundColor: Colors.red
                 ),
                 onPressed: () {
-                  context.read<QuizProvider>().result = 0;
+                  context.read<QuizProvider>().deletingProgress(level);
                   Navigator.pushReplacementNamed(context, '/choose');},
                  icon: const Icon(Icons.arrow_back_sharp), 
                  label: const Text("Start New Quiz",style: TextStyle(fontSize: 30),)),
@@ -51,8 +53,53 @@ class ResultHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var level = context.watch<QuizProvider>().levelList;
+    var result = context.watch<QuizProvider>().resultList;
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFF030651),
+        title: Text("Result",style: TextStyle(fontSize: 25),),
+      ),
+      body: result.isEmpty? 
+       const Center(
+        child: Padding(
+        padding: const EdgeInsets.all(14.0),
+        child: Text("Attempted Quiz result is displayed here.",style: TextStyle(fontSize: 20),),
+      )) :
+      ListView.builder(
+        itemCount: result.length,
+        itemBuilder: (context, index) {
+          int val = result[index];
+          String l = level[index];
+          return Card(
+            color: const Color.fromARGB(255, 5, 8, 96),
+            child: ListTile(
+              leading: const CircleAvatar(
+                child: Image(
+                  image:  AssetImage(
+                  'assets/images (1).png'
+                  )
+                ),
+              ),
+              title: Text(
+                val.toString()+ " Marks",
+                style: TextStyle(fontSize: 20,color: Colors.white),
+                ),
+                subtitle: Text(l.toString(),style: TextStyle(fontSize: 20,color: Colors.white),),
+              trailing: IconButton(
+                onPressed: () {
+                  context.read<QuizProvider>().deleteResult(index);
+                },
+                icon: const Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                  ),
+                ),
+            ),
+          );
+        },
       
+      ),
     );
   }
 }

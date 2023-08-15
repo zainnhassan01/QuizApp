@@ -12,18 +12,18 @@ class home extends StatelessWidget {
         children: [
           Container(
           width: screenwidth * 1,
-          child: Image(
+          child: const Image(
             fit: BoxFit.cover,
             image: AssetImage(
               'assets/images.jpeg'
               )),
         ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0.5,0.5,0.5,0),
+            padding: const EdgeInsets.fromLTRB(0.5,0,0.5,0),
             child: Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Color.fromRGBO(99, 176, 55, 1),Color.fromRGBO(40, 22, 139, 0.502)],
+                  colors: [Color.fromRGBO(130, 208, 29, 1),Color.fromRGBO(40, 22, 139, 0.502)],
                   tileMode: TileMode.clamp,
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter
