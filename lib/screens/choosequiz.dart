@@ -183,7 +183,7 @@ class _PersonalQuizListState extends State<PersonalQuizList> {
         title: Text("Choose a Quiz",style: TextStyle(fontSize: 25),),
       ),
       body: list.isEmpty? 
-      Center(
+      const Center(
         child: Padding(
         padding: const EdgeInsets.all(14.0),
         child: Text("No Personal Quiz Found.",style: TextStyle(fontSize: 20),),
@@ -192,7 +192,8 @@ class _PersonalQuizListState extends State<PersonalQuizList> {
         itemCount: list.length,
         itemBuilder: (context, index) {
         List<dynamic> value = list[index];
-        var data = value[index];
+        if(value.isNotEmpty){
+        var data = value[0];
           return Card(
             color: const Color.fromARGB(255, 5, 8, 96),
             child: ListTile(
@@ -201,7 +202,7 @@ class _PersonalQuizListState extends State<PersonalQuizList> {
                   "Name": data.name,
                   "index": index,
                 };
-                Navigator.pushReplacementNamed(context, "/personalQuizView",arguments: arguments);
+              Navigator.pushReplacementNamed(context, "/personalQuizView",arguments: arguments);
               },
               leading: const Icon(Icons.school,size: 25,color: Colors.white,),
               title: Text(
@@ -219,7 +220,9 @@ class _PersonalQuizListState extends State<PersonalQuizList> {
                 ),
             ),
           );
+        } 
         },
+      
       
       ),
     );

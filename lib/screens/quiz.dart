@@ -174,7 +174,6 @@ class QuizView extends StatelessWidget {
   }
 }
 
-
 class personalQuizView extends StatefulWidget {
   const personalQuizView({super.key});
 
@@ -244,10 +243,7 @@ var snackbarvar = const SnackBar(
               elevation: 0.0
             ),
             onPressed: () {
-              bool? checkALLMcqsResult = name == username.name ? context.read<QuizProvider>().checkALLMcqs(userList) : null;
-              //level == "Easy"? context.read<QuizProvider>().checkALLMcqs(quiz1): 
-              //   level == "Normal"?   context.read<QuizProvider>().checkALLMcqs(quiz2):
-              //          context.read<QuizProvider>().checkALLMcqs(quiz3);
+              bool? checkALLMcqsResult = name == username.name ? context.read<QuizProvider>().checkPersonalMcqs(userList) : null;
               if(checkALLMcqsResult == true){
                 Navigator.pushReplacementNamed(context, '/result');
               }
@@ -288,7 +284,7 @@ var snackbarvar = const SnackBar(
                           leading: Text("A" , style: TextStyle(fontSize: 19),),
                           title: Text( item.optionA , style: TextStyle(fontSize: 19),),
                           onTap: () {
-                            context.read<QuizProvider>().markedQuestion(item, item.optionA);
+                            context.read<QuizProvider>().markedPersonalQuestion(item, item.optionA);
                           },
                         ),
                       ),
@@ -299,7 +295,7 @@ var snackbarvar = const SnackBar(
                           leading: Text("B" , style: TextStyle(fontSize: 19),),
                           title: Text( item.optionB , style: TextStyle(fontSize: 19),),
                           onTap: () {
-                            context.read<QuizProvider>().markedQuestion(item, item.optionB);
+                            context.read<QuizProvider>().markedPersonalQuestion(item, item.optionB);
                           },
                         ),
                       ),
@@ -310,7 +306,7 @@ var snackbarvar = const SnackBar(
                           leading: Text("C" , style: TextStyle(fontSize: 19),),
                           title: Text( item.optionC , style: TextStyle(fontSize: 19),),
                           onTap: () {
-                            context.read<QuizProvider>().markedQuestion(item, item.optionC);
+                            context.read<QuizProvider>().markedPersonalQuestion(item, item.optionC);
                           },
                         ),
                         ),

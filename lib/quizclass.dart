@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -30,21 +31,18 @@ List<Quiz> HardQues = List.generate(5, (index) {
  return Quiz(name: "Hard",question: "Hard Question $index", optionA: "Hard Option A", optionB: "Hard Option B", optionC: "Hard Option C", correctOption: "Hard Option A");
 });
 
-List<Quiz> newList = [];
 class QuizProvider extends ChangeNotifier{
-  var _prefs;
-  var _result;
-  int get resultR => _result;
-  set result(int val){
-    result = val;
+  SharedPreferences _prefs;
+
+  QuizProvider(this._prefs){
+    loadSaveResults();
     notifyListeners();
   }
-  QuizProvider(){
-    loadSaveResults();
-  }
   void loadSaveResults() async{
-    _prefs = await SharedPreferences.getInstance();
+    // _prefs = await SharedPreferences.getInstance();
     await loadResult();
+    await loadLevel();
+    notifyListeners();
   }
   final List<Quiz> _quiz = baseQues;
   List<Quiz> get quizeasy => _quiz;
@@ -60,15 +58,27 @@ class QuizProvider extends ChangeNotifier{
 
   List<dynamic> _levelList = [];
   List<dynamic> get levelList => _levelList;
-  Future<void> loadResult() async{ 
+
+  int _result = 0 ;
+  int get result => _result;
+  set result(int val){
+    _result = val;
+  }
+   Future<void> loadResult() async{ 
+    try{
+    String jsonString = await _prefs.getString("keyResult") ?? "[]";
+    var jsonList = jsonDecode(jsonString) as List<dynamic>;
+    _resultList = jsonList.toList();
+    print(_resultList);
+    }catch(e){
+      print("Calling error $e");
+    }
+  }
+  Future<void> loadLevel() async{ 
     try{
     String jsonLevel = await _prefs.getString("level") ?? "[]";
     var jsonLevelList  = jsonDecode(jsonLevel) as List<dynamic>;
     _levelList = jsonLevelList.toList();
-    String jsonString = await _prefs.getString("keyValue") ?? "[]";
-    var jsonList = jsonDecode(jsonString) as List<dynamic>;
-    _resultList = jsonList.toList();
-    print(_resultList);
     }catch(e){
       print("Calling error $e");
     }
@@ -100,7 +110,7 @@ class QuizProvider extends ChangeNotifier{
     for(var i in item){
       i.tapOn = false;
     }
-    _result = 0;
+    result = 0;
     notifyListeners();
   }
   void deletingProgress(dynamic level) {
@@ -119,24 +129,26 @@ class QuizProvider extends ChangeNotifier{
     notifyListeners();
   }
 // MCQS selection Mechanism
-  void markedQuestion(dynamic item,String value){
+  void markedQuestion(Quiz item,String value){
     item.tapOn = true;
     if(value == item.correctOption){
-      _result++;
+      result = result + 1;
     }
     notifyListeners();
   }
-  bool checkALLMcqs(List<dynamic> quiz){
+  bool checkALLMcqs(List<Quiz> quiz){
+    var name;
     for(var x in quiz){
      if(x.tapOn == false){
       return false;
     }
     }
-     for(var i in quizeasy){
+     for(var i in quiz){
       i.tapOn = false;
+      name = i.name;
     }
-    _levelList.add(_level);
-    _resultList.add(_result);
+    _levelList.add(name);
+    resultList.add(result);
     print(_levelList);
     print(_result);
     print(_resultList);
@@ -144,19 +156,22 @@ class QuizProvider extends ChangeNotifier{
     return true;
   }
   // New Quiz Methods
-  List<List> quizList = [];
+  List<List<dynamic>> quizList = [];
 
-  List<Quiz> userList = [];
+  List<dynamic> userList = [];
   void generateList({name,question,optionA,optionB,optionC,correct}){
-    List<Quiz> newList = userList;
+    print("UserList $userList");
+    List<dynamic> newList = List.from(userList);
     newList.add(Quiz(name: name,question: question,optionA: optionA,optionB: optionB,optionC: optionC,correctOption: correct ));
-    print("user list $newList");
-    userList = newList;
+    print("newList $newList");
+    userList = List.from(newList);
     notifyListeners();
   }
 
   void savePersonalQuiz(){
-    quizList.add(userList);
+    List<dynamic> instancecopy = [...userList];
+    quizList.add(instancecopy);
+    print("$userList data is stored");
     print(quizList);
     notifyListeners();
   }
@@ -165,7 +180,35 @@ class QuizProvider extends ChangeNotifier{
     print(quizList);
     notifyListeners();
   }
-  
-  
-
+  void clearUserList(){
+    userList.clear();
+    notifyListeners();
+  }
+ // personal quiz shit
+   void markedPersonalQuestion(dynamic item,String value){
+    item.tapOn = true;
+    if(value == item.correctOption){
+      result = result + 1;
+    }
+    notifyListeners();
+  }
+  bool checkPersonalMcqs(List<dynamic> quiz){
+    var name;
+    for(var x in quiz){
+     if(x.tapOn == false){
+      return false;
+    }
+    }
+     for(var i in quiz){
+      i.tapOn = false;
+      name = i.name;
+    }
+    _levelList.add(name);
+    resultList.add(result);
+    print(_levelList);
+    print(_result);
+    print(_resultList);
+    saveResult();
+    return true;
+  }
 }

@@ -8,7 +8,7 @@ class result extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var level = context.watch<QuizProvider>().level;
-    var result = context.watch<QuizProvider>().resultR;
+    var result = context.watch<QuizProvider>().result;
     print("Result $result");
     return Scaffold(
       backgroundColor: Color(0xFF030651),
@@ -85,7 +85,7 @@ class ResultHistory extends StatelessWidget {
                 val.toString()+ " Marks",
                 style: TextStyle(fontSize: 20,color: Colors.white),
                 ),
-                subtitle: Text(l.toString(),style: TextStyle(fontSize: 20,color: Colors.white),),
+              subtitle: Text(l.toString(),style: TextStyle(fontSize: 20,color: Colors.white),),
               trailing: IconButton(
                 onPressed: () {
                   context.read<QuizProvider>().deleteResult(index);

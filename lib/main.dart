@@ -6,10 +6,13 @@ import 'package:quizapp/screens/home.dart';
 import 'package:quizapp/screens/personalquiz.dart';
 import 'package:quizapp/screens/quiz.dart';
 import 'package:quizapp/screens/result.dart';
-void main() {
+import 'package:shared_preferences/shared_preferences.dart';
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
    runApp(
     ChangeNotifierProvider(
-      create: (context) => QuizProvider(),
+      create: (context) => QuizProvider(prefs),
       child: MaterialApp(
     debugShowCheckedModeBanner: false,
     routes: {
