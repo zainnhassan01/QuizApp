@@ -67,8 +67,8 @@ var snackbarvar = const SnackBar(
               elevation: 0.0
             ),
             onPressed: () {
-              bool checkALLMcqsResult = level == "Easy"? context.read<QuizProvider>().checkALLMcqs(quiz1): 
-                level == "Normal"?   context.read<QuizProvider>().checkALLMcqs(quiz2):
+              bool checkALLMcqsResult = level == "OOP"? context.read<QuizProvider>().checkALLMcqs(quiz1): 
+                level == "DSA"?   context.read<QuizProvider>().checkALLMcqs(quiz2):
                        context.read<QuizProvider>().checkALLMcqs(quiz3);
               if(checkALLMcqsResult == true){
                 Navigator.pushReplacementNamed(context, '/result');
@@ -95,7 +95,7 @@ var snackbarvar = const SnackBar(
                 child:  Padding(
                   padding: const EdgeInsets.all(8.0),
                   child:  Container(
-                    child: level == "Easy"? QuizView(quiz1: quiz1): level == "Normal"? QuizView(quiz1: quiz2) : QuizView(quiz1: quiz3),
+                    child: level == "OOP"? QuizView(quiz1: quiz1): level == "DSA"? QuizView(quiz1: quiz2) : QuizView(quiz1: quiz3),
                   ),
                     
                 )
@@ -121,8 +121,8 @@ class QuizView extends StatelessWidget {
     var quiz1 = context.watch<QuizProvider>().quizeasy;
     var quiz2 = context.watch<QuizProvider>().quiznormal;
     var quiz3 = context.watch<QuizProvider>().quizhard;
-    List<Quiz> quiz = level == "Easy"? quiz1: 
-                      level == "Normal"? quiz2:
+    List<Quiz> quiz = level == "OOP"? quiz1: 
+                      level == "DSA"? quiz2:
                       quiz3;
     return ListView.builder(
       itemCount: quiz.length,
@@ -131,13 +131,17 @@ class QuizView extends StatelessWidget {
         return Card(
           color: item.tapOn == true? Colors.green :Colors.blue.shade100,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-          Text(item.question,style: const TextStyle(fontSize: 25),),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 2, 5,0),
+            child: Text("${index+1}. ${item.question}",style: const TextStyle(fontSize: 22),),
+          ),
           IgnorePointer(
           ignoring: item.tapOn == true,
             child: ListTile(
               selectedColor: Colors.red,
-              leading: Text("A" , style: TextStyle(fontSize: 19),),
+              leading: Text("A." , style: TextStyle(fontSize: 19),),
               title: Text( item.optionA , style: TextStyle(fontSize: 19),),
               onTap: () {
                 context.read<QuizProvider>().markedQuestion(item, item.optionA);
@@ -148,7 +152,7 @@ class QuizView extends StatelessWidget {
           ignoring: item.tapOn == true,
             child: ListTile(
               selectedColor: Colors.red,
-              leading: Text("B" , style: TextStyle(fontSize: 19),),
+              leading: Text("B." , style: TextStyle(fontSize: 19),),
               title: Text( item.optionB , style: TextStyle(fontSize: 19),),
               onTap: () {
                 context.read<QuizProvider>().markedQuestion(item, item.optionB);
@@ -159,7 +163,7 @@ class QuizView extends StatelessWidget {
           ignoring: item.tapOn == true,
             child: ListTile(
               selectedColor: Colors.red,
-              leading: Text("C" , style: TextStyle(fontSize: 19),),
+              leading: Text("C." , style: TextStyle(fontSize: 19),),
               title: Text( item.optionC , style: TextStyle(fontSize: 19),),
               onTap: () {
                 context.read<QuizProvider>().markedQuestion(item, item.optionC);

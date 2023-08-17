@@ -74,7 +74,7 @@ class choosequiz extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    Text("Easy",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: Colors.white),),
+                    Text("OOP",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: Colors.white),),
                   
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -85,7 +85,7 @@ class choosequiz extends StatelessWidget {
                     )
                   ),
                   onPressed: (){
-                    context.read<QuizProvider>().setDifficulty("Easy");
+                    context.read<QuizProvider>().setDifficulty("OOP");
                     context.read<QuizProvider>().setSignOut(false);
                     Navigator.pushNamed(context,"/quiz");
                   }, 
@@ -98,8 +98,8 @@ class choosequiz extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    const Text("Normal",
-                    style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: Colors.white),),
+                    const Text("Data Structures & Algorithms",
+                    style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color: Colors.white),),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       elevation: 5.0,
@@ -109,7 +109,7 @@ class choosequiz extends StatelessWidget {
                       )
                     ),
                   onPressed: (){
-                    context.read<QuizProvider>().setDifficulty("Normal");
+                    context.read<QuizProvider>().setDifficulty("DSA");
                     context.read<QuizProvider>().setSignOut(false);
                      Navigator.pushNamed(context,"/quiz");
                   }, 
@@ -119,7 +119,10 @@ class choosequiz extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                         const  Text("Hard",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: Colors.white),),
+                         Padding(
+                           padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
+                           child: const  Text("Database & Management Systems",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color: Colors.white),),
+                         ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           elevation: 5.0,
@@ -129,7 +132,7 @@ class choosequiz extends StatelessWidget {
                           )
                         ),
                         onPressed: (){
-                          context.read<QuizProvider>().setDifficulty("Hard");
+                          context.read<QuizProvider>().setDifficulty("DBMS");
                           context.read<QuizProvider>().setSignOut(false);
                            Navigator.pushNamed(context,"/quiz");
                         }, 
