@@ -85,7 +85,7 @@ class ResultHistory extends StatelessWidget {
                 val.toString()+ " Marks",
                 style: TextStyle(fontSize: 20,color: Colors.white),
                 ),
-              subtitle: Text(l.toString(),style: TextStyle(fontSize: 20,color: Colors.white),),
+              subtitle: Text("Quiz: $l",style: TextStyle(fontSize: 20,color: Colors.white),),
               trailing: IconButton(
                 onPressed: () {
                   context.read<QuizProvider>().deleteResult(index);

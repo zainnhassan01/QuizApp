@@ -224,7 +224,7 @@ void addQuestion(BuildContext context,String name){
                               ),
                               onPressed: () {
                                 context.read<QuizProvider>().savePersonalQuiz();
-                                // context.read<QuizProvider>().clearUserList();
+                                context.read<QuizProvider>().clearUserList();
                                 Navigator.pushNamed(context, "/choose");                    
                                 }, 
                               icon: Icon(Icons.arrow_back), 

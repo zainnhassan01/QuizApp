@@ -39,11 +39,13 @@ class QuizProvider extends ChangeNotifier{
     notifyListeners();
   }
   void loadSaveResults() async{
-    // _prefs = await SharedPreferences.getInstance();
     await loadResult();
     await loadLevel();
+    loadQuizLists();
     notifyListeners();
   }
+
+  //initalizing variables and getters
   final List<Quiz> _quiz = baseQues;
   List<Quiz> get quizeasy => _quiz;
 
@@ -64,6 +66,18 @@ class QuizProvider extends ChangeNotifier{
   set result(int val){
     _result = val;
   }
+  //deleting methods for Lists
+
+  
+  void deleteResult(int index){
+    _resultList.removeAt(index);
+    _levelList.removeAt(index);
+    print(_resultList);
+    saveResult();
+    notifyListeners();
+  }
+
+  //loading and saving methods from shared preferences
    Future<void> loadResult() async{ 
     try{
     String jsonString = await _prefs.getString("keyResult") ?? "[]";
@@ -83,11 +97,24 @@ class QuizProvider extends ChangeNotifier{
       print("Calling error $e");
     }
   }
-  void deleteResult(int index){
-    _resultList.removeAt(index);
-    print(_resultList);
-    saveResult();
-    notifyListeners();
+  Future<void> loadQuizLists() async{
+    try{
+      String jsonString = await _prefs.getString("quiz") ?? "[]";
+      var jsonList = jsonDecode(jsonString);
+      quizList = jsonList.toList();
+    }
+    catch(e){
+      print("Error Loading Saved Quiz $e");
+    }
+  }
+  void saveQuiz() async {
+    try{
+      String jsonQuizList = jsonEncode(quizList);
+      await _prefs.setString("quiz", jsonQuizList);
+    }
+    catch(e){
+      print("Saving result error $e");
+    }
   }
   void saveResult () async {
     try{
@@ -155,36 +182,8 @@ class QuizProvider extends ChangeNotifier{
     saveResult();
     return true;
   }
-  // New Quiz Methods
-  List<List<dynamic>> quizList = [];
 
-  List<dynamic> userList = [];
-  void generateList({name,question,optionA,optionB,optionC,correct}){
-    print("UserList $userList");
-    List<dynamic> newList = List.from(userList);
-    newList.add(Quiz(name: name,question: question,optionA: optionA,optionB: optionB,optionC: optionC,correctOption: correct ));
-    print("newList $newList");
-    userList = List.from(newList);
-    notifyListeners();
-  }
-
-  void savePersonalQuiz(){
-    List<dynamic> instancecopy = [...userList];
-    quizList.add(instancecopy);
-    print("$userList data is stored");
-    print(quizList);
-    notifyListeners();
-  }
-  void deleteQuiz(List<dynamic> value){
-    quizList.remove(value);
-    print(quizList);
-    notifyListeners();
-  }
-  void clearUserList(){
-    userList.clear();
-    notifyListeners();
-  }
- // personal quiz shit
+ // personal quiz seperate methods for checking and marking mcqs results
    void markedPersonalQuestion(dynamic item,String value){
     item.tapOn = true;
     if(value == item.correctOption){
@@ -202,6 +201,7 @@ class QuizProvider extends ChangeNotifier{
      for(var i in quiz){
       i.tapOn = false;
       name = i.name;
+      print(name);
     }
     _levelList.add(name);
     resultList.add(result);
@@ -210,5 +210,36 @@ class QuizProvider extends ChangeNotifier{
     print(_resultList);
     saveResult();
     return true;
+  }
+
+    // New Quiz Methods
+  List<List<dynamic>> quizList = [];
+
+  List<dynamic> userList = [];
+  void generateList({name,question,optionA,optionB,optionC,correct}){
+    print("UserList $userList");
+    List<dynamic> newList = List.from(userList);
+    newList.add(Quiz(name: name,question: question,optionA: optionA,optionB: optionB,optionC: optionC,correctOption: correct ));
+    print("newList $newList");
+    userList = List.from(newList);
+    notifyListeners();
+  }
+
+  void savePersonalQuiz(){
+    List<dynamic> instancecopy = [...userList];
+    quizList.add(instancecopy);
+    saveQuiz();
+    print("$userList data is stored");
+    print(quizList);
+    notifyListeners();
+  }
+  void deleteQuiz(List<dynamic> value){
+    quizList.remove(value);
+    print(quizList);
+    notifyListeners();
+  }
+  void clearUserList(){
+    userList.clear();
+    notifyListeners();
   }
 }
